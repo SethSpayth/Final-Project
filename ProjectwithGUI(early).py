@@ -219,6 +219,7 @@ class TouchDetector(ASLDetector):
         
         #Notify user when done
         print("DONE")
+    
         
         #Average the measurements
         for measurementSet in calibrationMatrix:
