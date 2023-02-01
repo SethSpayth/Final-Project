@@ -151,7 +151,7 @@ class TouchDetector():
                     self.findHands()
                     if self.hand:
                         termX, _, _ = self.hand["lmList"][16]
-                        if termX < horizontalThreshold:
+                        if termX > horizontalThreshold:
                             detectedLetter = "J"
                             break
             
