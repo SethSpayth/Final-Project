@@ -137,10 +137,40 @@ class TouchDetector():
             0x14 : "W",
             0x6D : "X",
             0xC0 : "Y",
+            0x66 : "Z"
         }
         try:
+
+            detectedLetter = translationDictionary[self.getMeasurements()]
+            
+            if detectedLetter == "I":
+                horizontalThreshold, _, _ = self.hand["lmList"][16]
+                initialX, _, _ = self.hand["lmList"][20]
+                for _ in range(11):
+                    self.videoFeed.update()
+                    self.findHands()
+                    if self.hand:
+                        termX, _, _ = self.hand["lmList"][16]
+                        if termX < horizontalThreshold:
+                            detectedLetter = "J"
+                            break
+            
+            if detectedLetter == "Z":
+                _, verticalThreshold, _ = self.hand["lmList"][0]
+                _, initalY, _ = self.hand["lmList"][8]
+                for _ in range(11):
+                    self.videoFeed.update()
+                    self.findHands()
+                    if self.hand:
+                        _, termY, _ = self.hand["lmList"][8]
+                        if termY < horizontalThreshold:
+                            detectedLetter = "Z"
+                            break
+                raise KeyError
+
+
             #####################################################################################
-            #    Concatinate translationDictionary[self.getMeasurements()]) to output string    #
+            #    Concatinate detectedLetter to output string    #
             #####################################################################################
             
             self.startInputTimer(1)
