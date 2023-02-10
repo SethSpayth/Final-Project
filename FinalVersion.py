@@ -78,6 +78,14 @@ class GUI():
 
 class TouchDetector():
     def __init__(self, gui = GUI(), videoFeed = Video()):
+        """
+        Initializes a ASL Detector using the touch detection method
+
+        Parameters:
+        gui (object): Instance of GUI class
+        videoFeed (object): Instance of Video class
+        """
+
         self.videoFeed = videoFeed
         self.gui = gui
         self.DEBUG = True
@@ -88,13 +96,37 @@ class TouchDetector():
         self.touchThreshold = 20
         
     def findDistance(self, p1, p2):
+        """
+        finds the distance between 2 points in 2D space
+
+        Uses the math hypot function to determine distance
+
+        Parameters:
+        p1 (float, float): first point
+        p2 (float, float): second point
+
+        Returns:
+        float: The distance between point 1 and point 2
+
+        """
         x1, y1 = p1
         x2, y2 = p2
-        cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
         length = hypot(x2 - x1, y2 - y1)
         return length
 
     def calibrate(self):
+        """
+        Calibrates the touch threshold of the program
+
+        Prompts the user to touch their index, middle and thumb together
+        then measures the distances between each of the fingertips 20 times
+        then averages the largest of each set to become the touch treshold
+
+        Parameters:
+        None
+        Returns:
+        None
+        """
         calibrationMatrix = []
         sum = 0
 
@@ -135,6 +167,18 @@ class TouchDetector():
         #####################
 
     def isTouching(self, p1, p2):
+        """
+        Determines if point 1 and point 2 are touching
+
+        Finds the distance between the 2 points then sees if the distance is less than the touch threshold
+
+        Parameters:
+        p1 (float, float): point 1
+        p2 (float, float): point 2
+
+        Returns:
+        bool: If the points are touching
+        """
         #find distance between points
         measurement = self.findDistance(p1, p2)
 
@@ -147,6 +191,19 @@ class TouchDetector():
         
     #Function that will take nessesary measurements and encode the measurements into hex
     def getMeasurements(self):
+        """
+        Generates a hex value based on measurements of the hand
+
+        Determines if index and middle; middle and ring; ring and pinky are touching.
+        Then based on the resulting number checks which point the thumb is touching
+
+        Parameters:
+        None
+
+        Returns
+        int: measurements encoded into a 2 digit hex value
+        """
+
 
         primaryMeasurementPairs = [(8,12,0x80), (12,16,0x40), (16,20,0x20)]
         
@@ -186,6 +243,19 @@ class TouchDetector():
             return measurements
                 
     def detectLetter(self):
+        """
+        Uses hex code from getMeasurements to see if a valid letter was detected then outputs it
+
+        If the hex code is valid, it will print to the GUI and play sound if sound is on
+        If the hex code is invalid, it will pass
+
+        Parameters:
+        None
+
+        Returns
+        None
+
+        """
         translationDictionary = {
         0xE6 : "A",
         0xF5 : "B",
@@ -246,9 +316,6 @@ class TouchDetector():
         
         except KeyError:
             print("hit a key error")
-
-        except KeyboardInterrupt:
-            print("Type Error")
 
     #Set input timer end time by adding a delay to the current time reading
     def startInputTimer(self, delayTime = 1.0):
