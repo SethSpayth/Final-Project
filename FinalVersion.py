@@ -367,7 +367,10 @@ while True:
         #updates the visibility of the LED based on the boolean value output by the input timer
         window['LED'].update(visible=detector.inputTimer())
         #for the physical LED 
-        #GPIO.output(LED_PIN,detector.inputTimer())
+        #if inputTimer():
+            #GPIO.output(LED_PIN,GPIO.HIGH)
+        #else:
+            #GPIO.output(LED_PIN, GPIO.LOW)
     if not values["led"]:
         window['LED'].update(visible=False)
 
